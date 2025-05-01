@@ -24,15 +24,9 @@ public class FPSController : MonoBehaviour
     void Update()
     {
 
+        this.UpdateCamera();
 
-        // 4) Movimiento en XZ
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-        Vector3 dir = transform.forward * z + transform.right * x;
-        dir.y = 0f; 
-        if (dir.sqrMagnitude > 1f) dir.Normalize();
-
-        controller.Move(dir * moveSpeed * Time.deltaTime);
+        this.UpdateMovement();
     }
     
     private void UpdateCamera(){
@@ -49,4 +43,26 @@ public class FPSController : MonoBehaviour
         transform.localRotation = Quaternion.Euler(0f, yaw, 0f);
         cameraTransform.localRotation = Quaternion.Euler(pitch, 0f, 0f);
     }
+
+    private void UpdateMovement()
+    {
+        //Capturamos los movimientos del teclado
+        float moveX = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
+        float moveZ = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
+
+        //Aplicamos más velocidad si el shift está pulsado
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+        {
+            moveX *= 2f;
+            moveZ *= 2f;
+        }
+
+        //Calculamos la dirección de movimiento
+        Vector3 move = transform.right * moveX + transform.forward * moveZ;
+
+        //Movemos al jugador
+        controller.Move(move);
+    }
+
+
 }
