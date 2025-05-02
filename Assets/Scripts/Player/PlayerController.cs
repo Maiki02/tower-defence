@@ -1,7 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterController))]
-public class FPSController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
 
@@ -9,8 +8,8 @@ public class FPSController : MonoBehaviour
     public Transform cameraTransform;
 
     private CharacterController controller;
-    private float yaw;   // ángulo Y
-    private float pitch; // ángulo X
+    private float yaw;
+    private float pitch;
 
     void Awake()
     {
