@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Enemy : CharacterBase
@@ -11,6 +12,13 @@ public class Enemy : CharacterBase
 
     private float lastAttackTime = -999f;
 
+    [Tooltip("Duración del parpadeo rojo")]
+    [SerializeField] private float flashDuration = 0.2f;
+    [Tooltip("Color de parpadeo")]
+    [SerializeField] private Color flashColor = new Color(1, 0, 0, 0.5f);
+
+    private Renderer rend;
+    private Color originalColor;
 
     private IDamageable towerDamageable;
     private IDamageable playerDamageable;
@@ -21,7 +29,8 @@ public class Enemy : CharacterBase
     {
         base.Awake();
         rb = GetComponent<Rigidbody>();
-
+        rend = GetComponentInChildren<Renderer>();
+        originalColor = rend.material.color;
         this.GetInitialTargets();
     }
 
@@ -93,6 +102,27 @@ public class Enemy : CharacterBase
         }
 
         Debug.Log($"Enemigo recibió {amount} de daño. Vida restante: {CurrentHealth}");
+    }
+
+    public void GetHit(float amount, Vector3 attackOrigin, Vector3 attackDir, float knockbackStrength)
+    {
+        // 1) Daño base
+        TakeDamage(amount);
+
+        // 2) Knock-back
+        Vector3 dir = attackDir.normalized;
+        rb.AddForce(dir * knockbackStrength, ForceMode.Impulse);
+
+        // 3) Parpadeo rojo
+        if (rend != null)
+            StartCoroutine(FlashRoutine());
+    }
+
+    private IEnumerator FlashRoutine()
+    {
+        rend.material.color = flashColor;
+        yield return new WaitForSeconds(flashDuration);
+        rend.material.color = originalColor;
     }
 
 }

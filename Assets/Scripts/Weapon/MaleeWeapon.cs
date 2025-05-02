@@ -5,6 +5,7 @@ public class MeleeWeapon : WeaponBase
     [Header("Attack Setup")]
     [Tooltip("Punto desde el cual se origina el ataque")]
     [SerializeField] private Transform attackPoint;
+    [SerializeField] private float knoackbackForce = 5f;
 
     public override void Attack()
     {
@@ -26,9 +27,19 @@ public class MeleeWeapon : WeaponBase
 
         Debug.Log($"Melee attack - {hits.Length} hits");
 
-        foreach (var hit in hits)
-            if (hit.TryGetComponent<IDamageable>(out var dmg))
-                dmg.TakeDamage(data.damage);
+        foreach (var hit in hits){
+            Enemy enemy = hit.GetComponent<Enemy>();
+            if (enemy != null){
+                Vector3 dir = (enemy.transform.position - attackPoint.position).normalized;
+                enemy.GetHit(
+                    data.damage,
+                    attackPoint.position,
+                    dir,
+                    knoackbackForce
+                );
+            }
+        }
+                
     }
 
     private void OnDrawGizmosSelected()
