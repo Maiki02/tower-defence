@@ -11,5 +11,15 @@ public class GameController : MonoBehaviour {
             Destroy(gameObject);
         }
     }
+    
+    public void FinishGame() {
+        Debug.Log("Fin del juego");
+        SceneController.Instance.LoadGameOverScene();
+    }   
+
+    public void ResetGame(){
+        Debug.Log("TODO reiniciar valores del juego");
+
+    }
 }
 

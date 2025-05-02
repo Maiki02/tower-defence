@@ -49,6 +49,8 @@ public class Enemy : CharacterBase
         // d) Rotación sólo en Y
         /*Quaternion targetRot = Quaternion.LookRotation(dir, Vector3.up);
         rb.MoveRotation(targetRot);*/
+
+        TryAttackNearbyTargets();
     }
 
     private void TryAttackNearbyTargets()

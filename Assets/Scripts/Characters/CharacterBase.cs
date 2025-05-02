@@ -2,6 +2,8 @@ using UnityEngine;
 
 public abstract class CharacterBase : MonoBehaviour, IHealth, IDamageable
 {
+    public new Transform transform => base.transform;
+    
     public float MaxHealth { get; private set; } = 100f; // Salud máxima del personaje
     public float CurrentHealth { get; private set; } // Salud actual del personaje
 
