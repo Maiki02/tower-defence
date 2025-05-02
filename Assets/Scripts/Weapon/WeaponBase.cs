@@ -4,14 +4,14 @@ using UnityEngine;
 public abstract class WeaponBase : MonoBehaviour, IWeapon
 {
     [SerializeField] protected WeaponData data;
-    private float lastAttackTime;
+    protected float lastAttackTime;
+    
+    [SerializeField] protected LayerMask damageableLayers;
 
     public void TryAttack()
     {
-        Debug.Log($"Intentamos ataque {lastAttackTime} {Time.time} {data.cooldown}");
         if (Time.time - lastAttackTime < data.cooldown) return;
         lastAttackTime = Time.time;
-        Debug.Log($"Intentamos ataque");
         Attack(); // lo implementan las subclases
     }
 

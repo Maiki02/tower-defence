@@ -1,30 +1,41 @@
 using UnityEngine;
 
-
 public class MeleeWeapon : WeaponBase
 {
-    private float lastAttackTime;
-
+    [Header("Attack Setup")]
+    [Tooltip("Punto desde el cual se origina el ataque")]
+    [SerializeField] private Transform attackPoint;
 
     public override void Attack()
     {
-        if (Time.time - lastAttackTime < data.cooldown) return;
+        //Debug.Log($"Melee attack - {Time.time - lastAttackTime } < {data.cooldown}");
+        //if (Time.time - lastAttackTime < data.cooldown) return;
+
+
         lastAttackTime = Time.time;
-        // Reproduce animación
-        /*GetComponent<Animator>().Play(data.attackAnimation.name);
-        // Detecta enemigos
-        var hits = Physics2D.OverlapCircleAll(transform.position, data.range);
+
+        // Lanzamos la animación antes de detectar
+        // GetComponent<Animator>().Play(data.attackAnimation.name);
+
+        // esto devuelve TODOS los colliders 3D en un radio concreto
+        Collider[] hits = Physics.OverlapSphere(
+            attackPoint.position,
+            data.range,
+            damageableLayers
+        );
+
+        Debug.Log($"Melee attack - {hits.Length} hits");
+
         foreach (var hit in hits)
-        {
             if (hit.TryGetComponent<IDamageable>(out var dmg))
                 dmg.TakeDamage(data.damage);
-        }*/
     }
 
-    // Para ver el área de golpe en el editor
     private void OnDrawGizmosSelected()
     {
-        /*Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, data.range);*/
+        if (attackPoint == null) return;
+        Gizmos.color = Color.red;
+        // Dibujamos la zona de impacto en el editor
+        Gizmos.DrawWireSphere(attackPoint.position, data.range);
     }
 }

@@ -15,6 +15,6 @@ MonoBehaviour:
   weaponName: Rifle
   damage: 100
   range: 50
-  cooldown: 0
+  cooldown: 2
   projectilePrefab: {fileID: 0}
   attackAnimation: {fileID: 0}

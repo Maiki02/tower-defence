@@ -4,7 +4,7 @@ public class Tower : MonoBehaviour, IDamageable, IHealth
 {
     public new Transform transform => base.transform; // Necesito el transform para saber si puede ser dañado o no
 
-    public float MaxHealth { get; private set; } = 100f; // Salud máxima de la torre
+    public float MaxHealth { get; private set; } = 10000f; // Salud máxima de la torre
     public float CurrentHealth { get; private set; } // Salud actual de la torre
 
     private void Awake()
@@ -16,7 +16,7 @@ public class Tower : MonoBehaviour, IDamageable, IHealth
     public void TakeDamage(float amount)
     {
         CurrentHealth -= amount;
-        Debug.Log($"Torre recibió {amount} de daño. Vida restante: {CurrentHealth}");
+        //Debug.Log($"Torre recibió {amount} de daño. Vida restante: {CurrentHealth}");
 
         if (CurrentHealth <= 0f){            
             Die();
