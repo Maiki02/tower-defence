@@ -21,7 +21,7 @@ public class Tower : MonoBehaviour, IDamageable, IHealth
             Die();
     }
 
-    private void Die()
+    public void Die()
     {
         Debug.Log("Torre destruida");
         Destroy(gameObject);
