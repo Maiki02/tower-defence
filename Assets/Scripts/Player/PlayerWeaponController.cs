@@ -1,15 +1,18 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 public class PlayerWeaponController : MonoBehaviour
 {
-    // Evento para que otros sistemas (UI, VFX) sepan cuándo cambias de arma
-    public event Action<IWeapon> OnWeaponChanged;
+    //Observers para notificar el cambio de arma y mostrarlo en la pantalla
+    private readonly List<IWeaponObserver> observers = new List<IWeaponObserver>();
+    
+    
 
     [SerializeField] private MeleeWeapon meleeWeapon;
     [SerializeField] private RangedWeapon rangedWeapon;
 
-    private WeaponBase currentWeapon;
+    public WeaponBase CurrentWeapon {get; set; }
 
     void Start()
     {
@@ -33,25 +36,42 @@ public class PlayerWeaponController : MonoBehaviour
 
     private void HandleAttackInput()
     {
-        if (currentWeapon == null) return;
+        if (CurrentWeapon == null) return;
 
         // Unificamos el disparo en Fire1
         if (Input.GetButtonDown("Fire"))
-            currentWeapon.Attack();
+            CurrentWeapon.Attack();
     }
 
     private void EquipWeapon(WeaponBase weapon)
     {
-        if (currentWeapon == weapon) return;
+        if (CurrentWeapon == weapon) return;
 
-        currentWeapon = weapon;
+        CurrentWeapon = weapon;
         // Activo sólo el GameObject del arma seleccionada
         meleeWeapon.gameObject.SetActive(weapon == meleeWeapon);
         rangedWeapon.gameObject.SetActive(weapon == rangedWeapon);
+
         // Notifico a los observers
-        OnWeaponChanged?.Invoke(currentWeapon);
+        CurrentWeapon = weapon;
+        NotifyObservers();
     }
 
-    // Por si quieres consultarlo desde otro script
-    public IWeapon GetCurrentWeapon() => currentWeapon;
+    public void RegisterObserver(IWeaponObserver observer)
+    {
+        if (!observers.Contains(observer))
+            observers.Add(observer);
+    }
+
+    public void UnregisterObserver(IWeaponObserver observer)
+    {
+        observers.Remove(observer);
+    }
+
+    // Llama a cada observador
+    private void NotifyObservers()
+    {
+        foreach (var obs in observers)
+            obs.OnWeaponChanged(CurrentWeapon);
+    }
 }
