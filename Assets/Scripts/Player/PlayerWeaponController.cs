@@ -6,8 +6,6 @@ public class PlayerWeaponController : MonoBehaviour
 {
     //Observers para notificar el cambio de arma y mostrarlo en la pantalla
     private readonly List<IWeaponObserver> observers = new List<IWeaponObserver>();
-    
-    
 
     [SerializeField] private MeleeWeapon meleeWeapon;
     [SerializeField] private RangedWeapon rangedWeapon;
@@ -39,8 +37,8 @@ public class PlayerWeaponController : MonoBehaviour
         if (CurrentWeapon == null) return;
 
         // Unificamos el disparo en Fire1
-        if (Input.GetButtonDown("Fire"))
-            CurrentWeapon.Attack();
+        if (Input.GetButtonDown("Fire1"))
+            CurrentWeapon.TryAttack();
     }
 
     private void EquipWeapon(WeaponBase weapon)

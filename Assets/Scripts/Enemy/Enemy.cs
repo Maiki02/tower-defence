@@ -82,4 +82,17 @@ public class Enemy : CharacterBase
         return flatDiff.magnitude <= attackRange;
     }
 
+    // Recibimos daño del jugador 
+    public override void TakeDamage(float amount)
+    {
+        CurrentHealth -= amount;
+
+        if (CurrentHealth <= 0f)
+        {
+            Die();
+        }
+
+        Debug.Log($"Enemigo recibió {amount} de daño. Vida restante: {CurrentHealth}");
+    }
+
 }
