@@ -40,7 +40,8 @@ public class PlayerWeaponController : MonoBehaviour
         if (Input.GetButtonDown("Fire1")){ 
             var damage= CurrentWeapon.TryAttack();
             //Sumamos el daño al score
-            
+            ScoreController.Instance.AddScore((int)damage);
+
         }
     }
 
