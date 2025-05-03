@@ -1275,9 +1275,17 @@ PrefabInstance:
       value: RangedWeapon
       objectReference: {fileID: 0}
     - target: {fileID: 8213627032357802103, guid: 4c6228c7642c195408387ec09c7db093, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 118402244}
+    - target: {fileID: 8213627032357802103, guid: 4c6228c7642c195408387ec09c7db093, type: 3}
       propertyPath: data
       value: 
       objectReference: {fileID: 11400000, guid: 5a6dcc1fef0167e4ea7e6a09102daa38, type: 2}
+    - target: {fileID: 8213627032357802103, guid: 4c6228c7642c195408387ec09c7db093, type: 3}
+      propertyPath: damageableLayers.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
