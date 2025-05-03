@@ -37,8 +37,11 @@ public class PlayerWeaponController : MonoBehaviour
         if (CurrentWeapon == null) return;
 
         // Unificamos el disparo en Fire1
-        if (Input.GetButtonDown("Fire1"))
-            CurrentWeapon.TryAttack();
+        if (Input.GetButtonDown("Fire1")){ 
+            var damage= CurrentWeapon.TryAttack();
+            //Sumamos el daño al score
+            
+        }
     }
 
     private void EquipWeapon(WeaponBase weapon)

@@ -719,6 +719,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89128e364ed38e54b9cadd0032504739, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnPoint: {fileID: 230705012}
 --- !u!114 &998838724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1041,8 +1042,18 @@ MonoBehaviour:
   - {fileID: 240140218}
   - {fileID: 1430210627}
   - {fileID: 2061073241}
-  waves: []
-  timeBetweenWaves: 5
+  waves:
+  - count: 10
+    spawnInterval: 3
+  - count: 20
+    spawnInterval: 2
+  - count: 30
+    spawnInterval: 2
+  - count: 30
+    spawnInterval: 1
+  - count: 40
+    spawnInterval: 1
+  timeBetweenWaves: 10
 --- !u!1 &1607227557
 GameObject:
   m_ObjectHideFlags: 0

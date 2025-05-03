@@ -101,6 +101,7 @@ public class Enemy : CharacterBase
 
         if (diff.magnitude <= attackRange)
         {
+            Debug.Log("Enemy attacked");
             targetDamageable.TakeDamage(attackDamage);
             lastAttackTime = Time.time;
         }
@@ -119,16 +120,28 @@ public class Enemy : CharacterBase
 
     public void GetHit(float amount, Vector3 attackOrigin, Vector3 attackDir, float knockbackStrength)
     {
+        // Flash feedback
+        if (rend != null) StartCoroutine(FlashRoutine());
+
         // Apply damage
         TakeDamage(amount);
 
         // Knock-back
         rb.AddForce(attackDir.normalized * knockbackStrength, ForceMode.Impulse);
 
-        // Flash feedback
-        if (rend != null)
-            StartCoroutine(FlashRoutine());
     }
+
+    public override void Die()
+{
+    // Efectos de muerte (animación)
+    //GetComponent<Animator>()?.Play("Death");
+
+    // Devolver al pool en vez de destruir
+    EnemySpawner.Instance.DespawnEnemy(gameObject, this.enemyType);
+
+    // Reset de estado interno 
+    CurrentHealth = maxHealth;
+}
 
     private IEnumerator FlashRoutine()
     {

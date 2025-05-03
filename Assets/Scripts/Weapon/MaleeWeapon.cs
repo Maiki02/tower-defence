@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class MeleeWeapon : WeaponBase
 {
-    [Header("Attack Setup")]
+    [Header("Attack Setup")] 
     [Tooltip("Punto desde el cual se origina el ataque")]
     [SerializeField] private Transform attackPoint;
     [SerializeField] private float knoackbackForce = 5f;
 
-    public override void Attack()
+    public override float Attack()
     {
         //Debug.Log($"Melee attack - {Time.time - lastAttackTime } < {data.cooldown}");
         //if (Time.time - lastAttackTime < data.cooldown) return;
@@ -25,8 +25,7 @@ public class MeleeWeapon : WeaponBase
             damageableLayers
         );
 
-        Debug.Log($"Melee attack - {hits.Length} hits");
-
+        float total=0f;
         foreach (var hit in hits){
             Enemy enemy = hit.GetComponent<Enemy>();
             if (enemy != null){
@@ -37,9 +36,10 @@ public class MeleeWeapon : WeaponBase
                     dir,
                     knoackbackForce
                 );
+                total += data.damage;
             }
         }
-                
+        return total;     
     }
 
     private void OnDrawGizmosSelected()

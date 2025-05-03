@@ -5,6 +5,8 @@ using UnityEngine.Pool;
 
 public class EnemySpawner : MonoBehaviour
 {
+    public static EnemySpawner Instance { get; private set; }
+
     [Header("Prefabs de Enemigos")]
     [SerializeField] private GameObject dwarfPrefab;
     [SerializeField] private GameObject normalPrefab;
@@ -18,6 +20,14 @@ public class EnemySpawner : MonoBehaviour
 
     private void Awake()
     {
+        // Singleton: aseguramos que solo haya una instancia de EnemySpawner
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+
         // Creamos los pools para cada tipo de enemigo al iniciar
         pools = new Dictionary<EnemyType, IObjectPool<GameObject>>
         {

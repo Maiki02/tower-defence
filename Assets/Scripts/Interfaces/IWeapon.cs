@@ -1,5 +1,5 @@
 public interface IWeapon
 {
     
-    void Attack();
+    public float Attack();
 }

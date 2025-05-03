@@ -8,13 +8,14 @@ public abstract class WeaponBase : MonoBehaviour, IWeapon
     
     [SerializeField] protected LayerMask damageableLayers;
 
-    public void TryAttack()
+    //Devuelve la cantidad de daño que hizo en el ataque
+    public float TryAttack()
     {
-        if (Time.time - lastAttackTime < data.cooldown) return;
+        if (Time.time - lastAttackTime < data.cooldown) return 0;
         lastAttackTime = Time.time;
-        Attack(); // lo implementan las subclases
+        return Attack(); // lo implementan las subclases
     }
 
-    // Cada arma concreta define su Attack()
-    public abstract void Attack();
+    // Cada arma concreta define su Attack() y devuelve el daño que hizo en el ataque
+    public abstract float Attack();
 }

@@ -59,6 +59,9 @@ public class PlayerController : MonoBehaviour
         //Calculamos la dirección de movimiento
         Vector3 move = transform.right * moveX + transform.forward * moveZ;
 
+        //Aplicamos la gravedad
+        move.y -= 9.81f * Time.deltaTime;
+
         //Movemos al jugador
         controller.Move(move);
     }

@@ -5,12 +5,11 @@ public class RangedWeapon : WeaponBase
 {   
     [SerializeField] private Camera cam;
 
-    public override void Attack()
+    public override float Attack()
     {
         //if (Time.time - lastAttackTime < data.cooldown) return;
         //lastAttackTime = Time.time;
 
-    Debug.Log("Vamo a atacar con Ranged");
         // Animación
         // GetComponent<Animator>().Play(data.attackAnimation.name);
 
@@ -18,14 +17,15 @@ public class RangedWeapon : WeaponBase
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         if (Physics.Raycast(ray, out RaycastHit hit, data.range, damageableLayers))
         {
-            Debug.Log("Hay damageable players");
             hit.collider.GetComponent<IDamageable>()?.TakeDamage(data.damage);
             // Aquí spawn pool de efecto de impacto en hit.point
+            return data.damage;
         }
 
         // Pool de muzzle flash + sonido
         SpawnMuzzleFlash();
         PlayShotSound();
+        return 0;
     }
 
     private void SpawnMuzzleFlash()
