@@ -3,117 +3,129 @@ using UnityEngine;
 
 public class Enemy : CharacterBase
 {
-    public float moveSpeed = 3f;
-    public float stoppingDistance = 0.5f;
+    [Header("Stats")]
+    [SerializeField] private float moveSpeed = 3f;
+    [SerializeField] private float stoppingDistance = 0.5f;
+    [SerializeField] private float attackRange = 1f;
+    [SerializeField] private float attackDamage = 10f;
+    [SerializeField] private float attackCooldown = 1.5f;
+    [SerializeField] private float maxHealth = 50f;
+    [SerializeField] private EnemyType enemyType = EnemyType.Normal;
 
-    public float attackRange = 1f;
-    public float attackDamage = 10f;
-    public float attackCooldown = 1.5f;
+    [Header("Target")]
+    [SerializeField] private Transform followTarget;
 
-    private float lastAttackTime = -999f;
-
-    [Tooltip("Duración del parpadeo rojo")]
+    [Header("Effects")]
     [SerializeField] private float flashDuration = 0.2f;
-    [Tooltip("Color de parpadeo")]
     [SerializeField] private Color flashColor = new Color(1, 0, 0, 0.5f);
 
+    private float lastAttackTime = Mathf.NegativeInfinity;
+    private Rigidbody rb;
     private Renderer rend;
     private Color originalColor;
-
-    private IDamageable towerDamageable;
-    private IDamageable playerDamageable;
-
-    private Rigidbody rb;
+    private IDamageable targetDamageable;
 
     protected override void Awake()
     {
         base.Awake();
+
+        // Initialize health
+        CurrentHealth = maxHealth;
+
+        // Cache components
         rb = GetComponent<Rigidbody>();
         rend = GetComponentInChildren<Renderer>();
         originalColor = rend.material.color;
-        this.GetInitialTargets();
+
+        SetTargetDamageableByEnemyType(enemyType);
     }
 
-    private void GetInitialTargets()
+    private void FixedUpdate()
     {
-        towerDamageable = GameObject.FindGameObjectWithTag("Tower").GetComponent<IDamageable>();
-        playerDamageable = GameObject.FindGameObjectWithTag("Player").GetComponent<IDamageable>();
+        if (targetDamageable == null) return;
+
+        this.GoToTarget();
+
+        TryAttackTarget();
     }
 
-    void FixedUpdate()
+    public void SetTargetDamageableByEnemyType(EnemyType enemyType)
     {
-
-        // a) Vector plano XZ
-        Vector3 flatDiff = towerDamageable.transform.position - rb.position;
-        flatDiff.y = 0f;
-
-        // b) Check rango
-        if (flatDiff.magnitude <= stoppingDistance) return;
-
-        // c) Normalizamos y movemos
-        Vector3 dir = flatDiff.normalized;
-        Vector3 nextPos = rb.position + dir * moveSpeed * Time.deltaTime;
-        rb.MovePosition(nextPos);
-
-        // d) Rotación sólo en Y
-        /*Quaternion targetRot = Quaternion.LookRotation(dir, Vector3.up);
-        rb.MoveRotation(targetRot);*/
-
-        TryAttackNearbyTargets();
-    }
-
-    private void TryAttackNearbyTargets()
-    {
-        if (Time.time < lastAttackTime + attackCooldown) return;
-
-        this.TryAttack(playerDamageable);
-        this.TryAttack(towerDamageable);
-    }
-
-    /* Intenta atacar a algo IDamageable si está cerca.
-    En caso de poder atacarlo, devuelve aplica el daño y devuelve true. */
-    private bool TryAttack(IDamageable target)
-    {
-        if (IsTargetInRange(target.transform))
+        var target = GetTargetByEnemyType(enemyType);
+        if (target != null)
         {
-            target.TakeDamage(attackDamage);
-            lastAttackTime = Time.time;
-            return true;
+            SetTargetDamageable(target);
         }
-        return false;
     }
 
-    /* Comprueba si el objetivo está dentro del rango de ataque. */
-    private bool IsTargetInRange(Transform target)
+    private IDamageable GetTargetByEnemyType(EnemyType enemyType)
     {
-        Vector3 flatDiff = target.position - transform.position;
-        flatDiff.y = 0f;
-        return flatDiff.magnitude <= attackRange;
+        if (enemyType == EnemyType.Dwarf)
+        {
+            return FindObjectOfType<Player>();
+        }
+        else if (enemyType == EnemyType.Normal || enemyType == EnemyType.Giant)
+        {
+            return FindObjectOfType<Tower>();
+        }
+        return null;
     }
 
-    // Recibimos daño del jugador 
+    private void SetTargetDamageable(IDamageable target)
+    {
+        targetDamageable = target;
+        followTarget = target.transform;
+    }
+
+    private void GoToTarget()
+    {
+        Vector3 direction = followTarget.position - rb.position;
+        direction.y = 0f; //Para que no suba ni baje
+
+        direction.Normalize(); // Para que no se mueva más rápido en diagonal
+
+        if (direction.magnitude > stoppingDistance)
+        {
+            Vector3 move = direction.normalized * moveSpeed * Time.fixedDeltaTime;
+            rb.MovePosition(rb.position + move);
+        }
+    }
+
+    private void TryAttackTarget()
+    {
+        if (Time.time < lastAttackTime + attackCooldown)
+            return;
+
+        Vector3 diff = followTarget.position - transform.position;
+        diff.y = 0f;
+
+        if (diff.magnitude <= attackRange)
+        {
+            targetDamageable.TakeDamage(attackDamage);
+            lastAttackTime = Time.time;
+        }
+    }
+
     public override void TakeDamage(float amount)
     {
         CurrentHealth -= amount;
-
         if (CurrentHealth <= 0f)
         {
             Die();
+            return;
         }
-
-        Debug.Log($"Enemigo recibió {amount} de daño. Vida restante: {CurrentHealth}");
+        Debug.Log($"Enemy took {amount} damage, remaining health: {CurrentHealth}");
     }
 
     public void GetHit(float amount, Vector3 attackOrigin, Vector3 attackDir, float knockbackStrength)
     {
-        // 1) Daño base
+        // Apply damage
         TakeDamage(amount);
 
-        // 2) Knock-back
-        Vector3 dir = attackDir.normalized;
-        rb.AddForce(dir * knockbackStrength, ForceMode.Impulse);
+        // Knock-back
+        rb.AddForce(attackDir.normalized * knockbackStrength, ForceMode.Impulse);
 
-        // 3) Parpadeo rojo
+        // Flash feedback
         if (rend != null)
             StartCoroutine(FlashRoutine());
     }
@@ -125,4 +137,8 @@ public class Enemy : CharacterBase
         rend.material.color = originalColor;
     }
 
+    public EnemyType GetEnemyType()
+    {
+        return enemyType;
+    }
 }

@@ -1,40 +1,75 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Pool;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject enemyPrefab;
+    [Header("Prefabs de Enemigos")]
+    [SerializeField] private GameObject dwarfPrefab;
+    [SerializeField] private GameObject normalPrefab;
+    [SerializeField] private GameObject giantPrefab;
+
+    [Header("Configuración de Pooling")]
     [SerializeField] private int initialPoolSize = 10;
 
-    private IObjectPool<GameObject> pool;
+    // Diccionario que almacena un pool para cada EnemyType
+    private Dictionary<EnemyType, IObjectPool<GameObject>> pools;
 
-    void Awake()
+    private void Awake()
     {
-        this.CreatePool();
+        // Creamos los pools para cada tipo de enemigo al iniciar
+        pools = new Dictionary<EnemyType, IObjectPool<GameObject>>
+        {
+            { EnemyType.Dwarf, CreatePool(dwarfPrefab) },
+            { EnemyType.Normal, CreatePool(normalPrefab) },
+            { EnemyType.Giant, CreatePool(giantPrefab) }
+        };
     }
 
-    private void CreatePool() { 
-        pool = new ObjectPool<GameObject>(
-            createFunc:    () => { var go = Instantiate(enemyPrefab); go.SetActive(false); return go; },
-            actionOnGet:   go => go.SetActive(true),
-            actionOnRelease: go => go.SetActive(false),
-            actionOnDestroy: go => Destroy(go),
+    // Crea un pool genérico para un prefab dado.
+    private IObjectPool<GameObject> CreatePool(GameObject prefab)
+    {
+        return new ObjectPool<GameObject>(
+            createFunc: () =>
+            {
+                // Instanciamos y desactivamos la instancia antes de devolverla
+                var go = Instantiate(prefab);
+                go.SetActive(false);
+                return go;
+            },
+            actionOnGet: go => go.SetActive(true),       // Al obtener: activamos
+            actionOnRelease: go => go.SetActive(false), // Al liberar: desactivamos
+            actionOnDestroy: go => Destroy(go),         // Al destruir: eliminamos el GameObject
             collectionCheck: false,
             defaultCapacity: initialPoolSize,
             maxSize: initialPoolSize * 4
         );
     }
 
-    public GameObject SpawnEnemy(Vector3 position)
+    // Obtiene un enemigo del pool correspondiente y lo posiciona.
+    public GameObject SpawnEnemy(EnemyType type, Vector3 position)
     {
+        // Verificamos que el enemigo exista en el pool
+        if (!pools.TryGetValue(type, out var pool)) return null;
+
+        // Obtenemos la instancia, la activamos y la colocamos en posición
         var enemy = pool.Get();
         enemy.transform.position = position;
         return enemy;
     }
 
-    public void DespawnEnemy(GameObject enemy)
+    // Devuelve un enemigo al pool correspondiente para reutilizarlo.
+    public void DespawnEnemy(GameObject enemy, EnemyType type)
     {
+        if (!pools.TryGetValue(type, out var pool))
+        {
+            Debug.LogWarning($"[EnemySpawner] Pool no encontrado para devolver el objeto de tipo {type}");
+            Destroy(enemy);
+            return;
+        }
+
+        // Liberamos la instancia para que quede disponible en el pool
         pool.Release(enemy);
     }
 }
