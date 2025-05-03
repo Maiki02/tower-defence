@@ -28,8 +28,8 @@ public class WaveManager : MonoBehaviour
         for (int i = 0; i < waves.Count; i++)
         {
             Wave oleada = waves[i];
-            // Aumentamos la cantidad de enemigos conforme sube el índice de oleada
-            int cantidad = oleada.count + i;
+            // Aumentamos la cantidad de enemigos conforme sube el índice de oleada, configurado en cada oleada
+            int cantidad = oleada.count;
 
             for (int j = 0; j < cantidad; j++)
             {
