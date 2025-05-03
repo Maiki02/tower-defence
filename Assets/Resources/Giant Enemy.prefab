@@ -123,7 +123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 2
   stoppingDistance: 0.5
-  attackRange: 2
+  attackRange: 10
   attackDamage: 35
   attackCooldown: 4
   maxHealth: 240

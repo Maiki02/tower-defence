@@ -16,7 +16,7 @@ public class Tower : MonoBehaviour, IDamageable, IHealth
     public void TakeDamage(float amount)
     {
         CurrentHealth -= amount;
-        //Debug.Log($"Torre recibió {amount} de daño. Vida restante: {CurrentHealth}");
+        Debug.Log($"Torre recibió {amount} de daño. Vida restante: {CurrentHealth}");
 
         if (CurrentHealth <= 0f){            
             Die();

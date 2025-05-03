@@ -95,13 +95,12 @@ public class Enemy : CharacterBase
     {
         if (Time.time < lastAttackTime + attackCooldown)
             return;
-
+        Debug.Log("Intentamos ataque");
         Vector3 diff = followTarget.position - transform.position;
         diff.y = 0f;
-
+        Debug.Log($"diff.magnitude <= attackRange: {diff.magnitude} <= {attackRange}");
         if (diff.magnitude <= attackRange)
         {
-            Debug.Log("Enemy attacked");
             targetDamageable.TakeDamage(attackDamage);
             lastAttackTime = Time.time;
         }
