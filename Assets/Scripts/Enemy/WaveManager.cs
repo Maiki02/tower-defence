@@ -20,7 +20,7 @@ public class WaveManager : MonoBehaviour
         if (waves == null || waves.Count == 0) Debug.LogError("WaveManager: falta configurar Waves.");
 
         // Arrancamos la gestión de oleadas
-        StartCoroutine(SpawnAllWaves());
+        //StartCoroutine(SpawnAllWaves());
     }
 
     private IEnumerator SpawnAllWaves()

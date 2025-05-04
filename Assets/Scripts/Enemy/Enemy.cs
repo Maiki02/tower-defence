@@ -5,6 +5,7 @@ public class Enemy : CharacterBase
 {
     [Header("Stats")]
     [SerializeField] private float moveSpeed = 3f;
+    [SerializeField] private float rotationSpeed = 10f; //Para que el enemigo rote cuando se mueve
     [SerializeField] private float stoppingDistance = 0.5f;
     [SerializeField] private float attackRange = 1f;
     [SerializeField] private float attackDamage = 10f;
@@ -19,9 +20,12 @@ public class Enemy : CharacterBase
     [SerializeField] private float flashDuration = 0.2f;
     [SerializeField] private Color flashColor = new Color(1, 0, 0, 0.5f);
 
+    private bool isDeath = false;
+
     private float lastAttackTime = Mathf.NegativeInfinity;
     private Rigidbody rb;
     private Renderer rend;
+    private Animator animator;
     private Color originalColor;
     private IDamageable targetDamageable;
 
@@ -36,6 +40,7 @@ public class Enemy : CharacterBase
         rb = GetComponent<Rigidbody>();
         rend = GetComponentInChildren<Renderer>();
         originalColor = rend.material.color;
+        animator = GetComponentInChildren<Animator>();
 
         SetTargetDamageableByEnemyType(enemyType);
     }
@@ -43,8 +48,10 @@ public class Enemy : CharacterBase
     private void FixedUpdate()
     {
         if (targetDamageable == null) return;
+        if (isDeath) return; // No se mueve si está muerto
 
-        this.GoToTarget();
+        var isMoving = this.GoToTarget();
+        animator.SetBool("isWalking", isMoving);
 
         TryAttackTarget();
     }
@@ -76,31 +83,48 @@ public class Enemy : CharacterBase
         targetDamageable = target;
         followTarget = target.transform;
     }
-
-    private void GoToTarget()
+    private float GetColliderDistance()
     {
-        Vector3 direction = followTarget.position - rb.position;
-        direction.y = 0f; //Para que no suba ni baje
+        Collider myCol = GetComponent<Collider>();
+        Collider targetCol = followTarget.GetComponent<Collider>();
+        Vector3 myPoint = myCol.ClosestPoint(followTarget.position);
+        Vector3 tgtPoint = targetCol.ClosestPoint(transform.position);
 
-        direction.Normalize(); // Para que no se mueva más rápido en diagonal
+        Vector3 diff = tgtPoint - myPoint;
+        diff.y = 0f;
+        return diff.magnitude;
+    }
 
-        if (direction.magnitude > stoppingDistance)
+    // Retorna true si se mueve
+    private bool GoToTarget()
+    {
+        float dist = GetColliderDistance();
+        if (dist > stoppingDistance)
         {
-            Vector3 move = direction.normalized * moveSpeed * Time.fixedDeltaTime;
-            rb.MovePosition(rb.position + move);
+            // dirección para mover/rotar
+            Vector3 rawDir = followTarget.position - transform.position;
+            rawDir.y = 0f;
+            Vector3 dir = rawDir.normalized;
+
+            // rotar suavemente
+            Quaternion targetRot = Quaternion.LookRotation(dir);
+            rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRot, rotationSpeed * Time.fixedDeltaTime));
+
+            // avanzar
+            rb.MovePosition(rb.position + dir * moveSpeed * Time.fixedDeltaTime);
+            return true;
         }
+        return false;
     }
 
     private void TryAttackTarget()
     {
         if (Time.time < lastAttackTime + attackCooldown)
             return;
-        Debug.Log("Intentamos ataque");
-        Vector3 diff = followTarget.position - transform.position;
-        diff.y = 0f;
-        Debug.Log($"diff.magnitude <= attackRange: {diff.magnitude} <= {attackRange}");
-        if (diff.magnitude <= attackRange)
+
+        if (GetColliderDistance() <= attackRange)
         {
+            animator.SetTrigger("Attack");
             targetDamageable.TakeDamage(attackDamage);
             lastAttackTime = Time.time;
         }
@@ -131,16 +155,48 @@ public class Enemy : CharacterBase
     }
 
     public override void Die()
-{
-    // Efectos de muerte (animación)
-    //GetComponent<Animator>()?.Play("Death");
+    {
+        // Efectos de muerte (animación)    
+        animator.SetTrigger("Death");
+        StartCoroutine(WaitForDeathAnimation());
 
-    // Devolver al pool en vez de destruir
-    EnemySpawner.Instance.DespawnEnemy(gameObject, this.enemyType);
 
-    // Reset de estado interno 
-    CurrentHealth = maxHealth;
-}
+    }
+
+
+    private IEnumerator WaitForDeathAnimation()
+    {
+        isDeath = true;
+        float dur = 2f; // duración de tu animación Death
+        float elapsed = 0f;
+
+        Vector3 startPos = transform.position;
+        Vector3 endPos = new Vector3(startPos.x, -0.5f, startPos.z);
+        //Le ponemos una y de -0.5 para que se vea que cae al suelo y no se quede flotando
+
+        // Le aplicamos un fade out al material del enemigo
+        Material mat = rend.material;
+        Color orig = mat.color;
+
+        while (elapsed < dur)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / dur);
+
+            // Fade out
+            mat.color = new Color(orig.r, orig.g, orig.b, 1f - t);
+
+            // Bajar hasta y=0
+            transform.position = Vector3.Lerp(startPos, endPos, t);
+
+            yield return null;
+        }
+
+        // Al final, despawnea
+        EnemySpawner.Instance.DespawnEnemy(gameObject, enemyType);
+        CurrentHealth = maxHealth;
+        isDeath = false;
+    }
 
     private IEnumerator FlashRoutine()
     {

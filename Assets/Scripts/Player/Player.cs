@@ -31,6 +31,8 @@ public class Player : CharacterBase, ILives
         CurrentHealth = Mathf.Max(CurrentHealth - amount, 0f); //Para evitar valores negativos
         OnHealthChanged?.Invoke(CurrentHealth); //Llamamos al evento de cambio de vida
         if (CurrentHealth == 0f) LoseLife(); //Si la vida es 0, perdemos una vida
+
+        Debug.Log($"Player took {amount} damage. Current health: {CurrentHealth}");
     }
 
     public void LoseLife()
