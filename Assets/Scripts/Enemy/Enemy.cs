@@ -171,7 +171,7 @@ public class Enemy : CharacterBase
         float elapsed = 0f;
 
         Vector3 startPos = transform.position;
-        Vector3 endPos = new Vector3(startPos.x, -0.5f, startPos.z);
+        Vector3 endPos = new Vector3(startPos.x, GetDeathYPosition(), startPos.z);
         //Le ponemos una y de -0.5 para que se vea que cae al suelo y no se quede flotando
 
         // Le aplicamos un fade out al material del enemigo
@@ -196,6 +196,18 @@ public class Enemy : CharacterBase
         EnemySpawner.Instance.DespawnEnemy(gameObject, enemyType);
         CurrentHealth = maxHealth;
         isDeath = false;
+    }
+
+    private float GetDeathYPosition()
+    {
+        // Devuelve la posición Y a la que queremos que caiga el enemigo
+        if(enemyType == EnemyType.Normal)
+            return -1f;
+        else if (enemyType == EnemyType.Giant)
+            return -2f;
+        else if (enemyType == EnemyType.Dwarf)
+            return -0.5f;
+        return 0f;
     }
 
     private IEnumerator FlashRoutine()
