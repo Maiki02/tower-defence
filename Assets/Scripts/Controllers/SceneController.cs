@@ -21,6 +21,11 @@ public class SceneController : MonoBehaviour
         LoadScene("Game");
     }
 
+    public void LoadIntroScene()
+    {
+        LoadScene("IntroScene");
+    }
+
     public void LoadGameOverScene()
     {
         LoadScene("GameOver");

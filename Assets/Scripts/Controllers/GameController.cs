@@ -34,8 +34,7 @@ public class GameController : MonoBehaviour
     {
         SetState(GameState.Playing);
         //ScoreController.Instance.ResetScore();
-        Debug.Log("Load Scene");
-        SceneController.Instance.LoadGameScene();
+        SceneController.Instance.LoadIntroScene();
     }
 
     public void PauseGame()
