@@ -5,7 +5,7 @@ using System.Collections;
 public class IntroController : MonoBehaviour
 {
     public CanvasGroup canvasGroup;
-    public float fadeDuration = 1f;     // duración del fade
+    public float fadeDuration = 2f;     // duración del fade
 
     void Start()
     {

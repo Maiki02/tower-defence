@@ -41,7 +41,7 @@ public class Player : CharacterBase, ILives
         OnLivesChanged?.Invoke(CurrentLives); //Llamamos al evento de cambio de vidas
         if (CurrentLives > 0)
         {
-            StartCoroutine(RespawnRoutine()); //Iniciamos la rutina de respawn
+            RespawnRoutine(); //Iniciamos la rutina de respawn
         }
         else
         {
@@ -52,16 +52,12 @@ public class Player : CharacterBase, ILives
 
     }
 
-    private IEnumerator RespawnRoutine()
+    private void RespawnRoutine()
     {
-        // bloqueo, animación de fade-out…
-        yield return new WaitForSeconds(1f);
         transform.position = spawnPoint.position;
+        transform.rotation = spawnPoint.rotation;
         CurrentHealth = MaxHealth;
         OnHealthChanged?.Invoke(CurrentHealth);
-        // invulnerabilidad temporal…
-        yield return new WaitForSeconds(1f);
-        // fin de invulnerabilidad, reactivar controles…
     }
 
 }

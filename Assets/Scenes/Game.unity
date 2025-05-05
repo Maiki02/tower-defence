@@ -622,13 +622,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 230705011}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 1, z: 20}
+  m_LocalRotation: {x: 0, y: 0.9848078, z: -0, w: -0.17364809}
+  m_LocalPosition: {x: 14.18, y: 1, z: 16.73}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 200, z: 0}
 --- !u!1 &240140217
 GameObject:
   m_ObjectHideFlags: 0
@@ -1738,8 +1738,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 998838714}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 24}
+  m_LocalRotation: {x: 0, y: 0.9848078, z: -0, w: -0.17364809}
+  m_LocalPosition: {x: 14.18, y: 1, z: 17.47}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1748,7 +1748,7 @@ Transform:
   - {fileID: 7223426292682362}
   - {fileID: 812043938}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 200, z: 0}
 --- !u!114 &998838719
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2520,17 +2520,13 @@ MonoBehaviour:
   - {fileID: 1430210627}
   - {fileID: 2061073241}
   waves:
+  - count: 4
+    spawnInterval: 2
+  - count: 7
+    spawnInterval: 1.5
   - count: 10
-    spawnInterval: 3
-  - count: 20
-    spawnInterval: 2
-  - count: 30
-    spawnInterval: 2
-  - count: 30
     spawnInterval: 1
-  - count: 40
-    spawnInterval: 1
-  timeBetweenWaves: 10
+  timeBetweenWaves: 15
 --- !u!1 &1579083347
 GameObject:
   m_ObjectHideFlags: 0

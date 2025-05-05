@@ -28,25 +28,33 @@ public class WaveManager : MonoBehaviour
         for (int i = 0; i < waves.Count; i++)
         {
             Wave oleada = waves[i];
-            // Aumentamos la cantidad de enemigos conforme sube el índice de oleada, configurado en cada oleada
             int cantidad = oleada.count;
 
+            // spawn de la oleada
             for (int j = 0; j < cantidad; j++)
             {
-                // Elegimos un punto de spawn al azar
                 Transform punto = spawnPoints[Random.Range(0, spawnPoints.Count)];
-                // Elegimos un tipo de enemigo al azar
                 EnemyType tipo = GetRandomEnemyType();
-                // Le pedimos al spawner que lo cree en ese punto
                 enemySpawner.SpawnEnemy(tipo, punto.position);
                 yield return new WaitForSeconds(oleada.spawnInterval);
             }
 
-            // Pausa entre oleadas (menos al final)
+            // pausa entre oleadas
             if (i < waves.Count - 1)
                 yield return new WaitForSeconds(timeBetweenWaves);
+
+            // si ya fue la última oleada.
+            if (i == waves.Count - 1)
+            {
+                // espera a que no quede ningún Enemy en escena
+                yield return new WaitUntil(() => FindObjectsOfType<Enemy>().Length == 0);
+                // llama al fin del juego
+                GameController.Instance.FinishGame(GameOverType.PlayerWIN);
+                yield break;
+            }
         }
     }
+
 
     private EnemyType GetRandomEnemyType()
     {
