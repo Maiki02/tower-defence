@@ -158,9 +158,10 @@ public class Enemy : CharacterBase
         // Apply damage
         TakeDamage(amount);
 
-        // Knock-back
-        rb.AddForce(attackDir.normalized * knockbackStrength, ForceMode.Impulse);
-
+        // Knock-back y un pequeño salto, para todos los enemigos igual
+        const float jumpForce = 2f;
+        Vector3 impulse = attackDir.normalized * knockbackStrength + Vector3.up * jumpForce; 
+        rb.AddForce(impulse, ForceMode.Impulse);
     }
 
     public override void Die()
