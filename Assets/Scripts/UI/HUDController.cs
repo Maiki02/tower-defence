@@ -37,7 +37,7 @@ public class HUDController : MonoBehaviour
         maxLives = player.MaxLives;
 
         UpdateLivesIcons(maxLives);
-        healthSlider.fillRect.GetComponent<Image>().color = new Color(0.5f, 1f, 0.5f, 1f); // Verde
+        //healthSlider.fillRect.GetComponent<Image>().color = new Color(0.5f, 1f, 0.5f, 1f); // Verde
     }
 
     private void UpdateHealthBar(float currentHealth)
@@ -46,6 +46,8 @@ public class HUDController : MonoBehaviour
 
         if(currentHealth <= 30f){
             healthSlider.fillRect.GetComponent<Image>().color = new Color(1f, 0.5f, 0.5f, 1f); // Rojo
+        } else {
+            healthSlider.fillRect.GetComponent<Image>().color = new Color(0.5f, 1f, 0.5f, 1f); // Verde
         }
     }
 
