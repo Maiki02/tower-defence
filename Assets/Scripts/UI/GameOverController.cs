@@ -15,6 +15,11 @@ public class GameOverController : MonoBehaviour
         towerDeadPanel.SetActive(false);
         winPanel.SetActive(false);
         playerDeadPanel.SetActive(false);
+
+        //Mostramos el cursor
+        Cursor.lockState  = CursorLockMode.None;
+        Cursor.visible    = true;
+
     }
 
     private void Start()

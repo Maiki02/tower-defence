@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour
 {
     public static GameController Instance { get; private set; }
-    public GameState CurrentState { get; private set; } = GameState.Menu;
+    public GameState CurrentState { get; private set; } = GameState.Menu; //No lo estamos usando por ahora
     [SerializeField] public GameOverType CurrentGameOverType { get; private set; } = GameOverType.None;
     public int Score { get; private set; } = 0;
 
@@ -37,18 +37,6 @@ public class GameController : MonoBehaviour
         SceneController.Instance.LoadIntroScene();
     }
 
-    public void PauseGame()
-    {
-        SetState(GameState.Paused);
-        Time.timeScale = 0f;
-    }
-
-    public void ResumeGame()
-    {
-        SetState(GameState.Playing);
-        Time.timeScale = 1f;
-    }
-
     public void FinishGame(GameOverType gameOverType)
     {
         CurrentGameOverType = gameOverType;
@@ -59,8 +47,6 @@ public class GameController : MonoBehaviour
 
     public void ResetGame()
     {
-        // Recargar escena y restaurar valores
-        Time.timeScale = 1f;
-        SceneManager.LoadScene("Menu");
+        SceneController.Instance.LoadMenuScene();
     }
 }

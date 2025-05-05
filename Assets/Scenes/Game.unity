@@ -2520,13 +2520,13 @@ MonoBehaviour:
   - {fileID: 1430210627}
   - {fileID: 2061073241}
   waves:
-  - count: 4
+  - count: 5
     spawnInterval: 2
-  - count: 7
+  - count: 6
     spawnInterval: 1.5
-  - count: 10
+  - count: 12
     spawnInterval: 1
-  timeBetweenWaves: 15
+  timeBetweenWaves: 12
 --- !u!1 &1579083347
 GameObject:
   m_ObjectHideFlags: 0
