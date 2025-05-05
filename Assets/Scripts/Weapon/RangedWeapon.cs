@@ -20,7 +20,9 @@ public class RangedWeapon : WeaponBase
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         if (Physics.Raycast(ray, out RaycastHit hit, data.range, damageableLayers))
         {
-            hit.collider.GetComponent<IDamageable>()?.TakeDamage(data.damage);
+
+      
+            hit.collider.GetComponent<Enemy>()?.GetHit(data.damage, ray.origin, ray.direction, knoackbackForce);
             // Aquí spawn pool de efecto de impacto en hit.point
             return data.damage;
         }

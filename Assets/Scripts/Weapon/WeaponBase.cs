@@ -5,6 +5,7 @@ public abstract class WeaponBase : MonoBehaviour, IWeapon
 {
     [SerializeField] protected WeaponData data;
     protected float lastAttackTime;
+    [SerializeField] protected float knoackbackForce = 5f;
     
     [SerializeField] protected LayerMask damageableLayers;
 

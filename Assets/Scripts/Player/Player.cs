@@ -37,7 +37,6 @@ public class Player : CharacterBase, ILives
 
     public void LoseLife()
     {
-        AudioController.Instance.PlaySFX(SoundType.LoseHealth); 
         
         CurrentLives--;
         OnLivesChanged?.Invoke(CurrentLives); //Llamamos al evento de cambio de vidas
@@ -48,7 +47,10 @@ public class Player : CharacterBase, ILives
         else
         {
             OnPlayerDied?.Invoke(); //Llamamos al evento de muerte del jugador
-        }
+        }        
+    
+        AudioController.Instance.PlaySFX(SoundType.LoseHealth); 
+
     }
 
     private IEnumerator RespawnRoutine()

@@ -3,9 +3,7 @@ using UnityEngine;
 public class MeleeWeapon : WeaponBase
 {
     [Header("Attack Setup")] 
-    [Tooltip("Punto desde el cual se origina el ataque")]
     [SerializeField] private Transform attackPoint;
-    [SerializeField] private float knoackbackForce = 5f;
 
     public override float Attack()
     {
