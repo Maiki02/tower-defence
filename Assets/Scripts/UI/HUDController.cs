@@ -9,6 +9,7 @@ public class HUDController : MonoBehaviour
     [Header("Lives UI")]
     [SerializeField] private Image[] lifeIcons;
     [SerializeField] private Sprite fullLifeSprite;
+    [SerializeField] private Sprite emptyLifeSprite;
 
     private float maxHealth;
     private int maxLives;
@@ -37,7 +38,7 @@ public class HUDController : MonoBehaviour
         maxLives = player.MaxLives;
 
         UpdateLivesIcons(maxLives);
-        //healthSlider.fillRect.GetComponent<Image>().color = new Color(0.5f, 1f, 0.5f, 1f); // Verde
+        healthSlider.fillRect.GetComponent<Image>().color = new Color(0.5f, 1f, 0.5f, 1f); // Verde
     }
 
     private void UpdateHealthBar(float currentHealth)
@@ -55,7 +56,7 @@ public class HUDController : MonoBehaviour
     {
         for (int i = 0; i < lifeIcons.Length; i++)
         {
-            lifeIcons[i].sprite = (i < currentLives) ? fullLifeSprite : null;
+            lifeIcons[i].sprite = (i < currentLives) ? fullLifeSprite : emptyLifeSprite;
         }
     }
 }
