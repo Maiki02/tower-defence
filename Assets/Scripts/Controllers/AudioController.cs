@@ -37,9 +37,12 @@ public class AudioController : MonoBehaviour
 
     public void PlayMusic(SoundType type, bool loop = true)
     {
+
         AudioClip clip = soundClips[(int)type];
-        if (clip != null)
+        if (clip != null){ 
+            Debug.Log("No es nulo");
             PlayMusic(clip, loop);
+        }
     }
 
     public void PlayMusic(AudioClip clip, bool loop = true)
@@ -68,6 +71,7 @@ public class AudioController : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        Debug.Log("Escena cargada: " + scene.name);
         if (scene.name == "Game")
             PlayMusic(SoundType.StartScene);
     }
