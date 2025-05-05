@@ -133,9 +133,9 @@ public class Enemy : CharacterBase
 
     private void PlaySound()
     {
-        if (enemyType == EnemyType.Dwarf )
+        if (enemyType == EnemyType.Dwarf)
             AudioController.Instance.PlaySFX(SoundType.EnemyAttack);
-        else 
+        else
             AudioController.Instance.PlaySFX(SoundType.TowerAttack);
     }
 
@@ -160,7 +160,7 @@ public class Enemy : CharacterBase
 
         // Knock-back y un pequeño salto, para todos los enemigos igual
         const float jumpForce = 2f;
-        Vector3 impulse = attackDir.normalized * knockbackStrength + Vector3.up * jumpForce; 
+        Vector3 impulse = attackDir.normalized * knockbackStrength + Vector3.up * jumpForce;
         rb.AddForce(impulse, ForceMode.Impulse);
     }
 
@@ -175,51 +175,52 @@ public class Enemy : CharacterBase
     }
 
 
-private IEnumerator WaitForDeathAnimation()
-{
-    // Marcar al enemigo como “muerto” para impedir otras acciones
-    isDeath = true;
-
-    // Duración total de la animación y contador de tiempo transcurrido
-    float dur = 2f;
-    float elapsed = 0f;
-
-    // Posición inicial y posición final (caída al suelo)
-    Vector3 startPos = transform.position;
-    Vector3 endPos = new Vector3(startPos.x, GetDeathYPosition(), startPos.z);
-
-    // Preparar el material para el fade-out
-    Material mat = rend.material;
-    Color orig = mat.color;
-
-    // Bucle de animación: mientras no se cumpla la duración
-    while (elapsed < dur)
+    private IEnumerator WaitForDeathAnimation()
     {
-        elapsed += Time.deltaTime;
-        float t = Mathf.Clamp01(elapsed / dur);
+        // Marcar al enemigo como “muerto” para impedir otras acciones
+        isDeath = true;
 
-        // Fade-out del color del material (de opaco a transparente)
-        mat.color = new Color(orig.r, orig.g, orig.b, 1f - t);
+        // Duración total de la animación y contador de tiempo transcurrido
+        float dur = 2f;
+        float elapsed = 0f;
 
-        // Movemos la posición (bajar hacia endPos)
-        transform.position = Vector3.Lerp(startPos, endPos, t);
+        // Posición inicial y posición final (caída al suelo)
+        Vector3 startPos = transform.position;
+        Vector3 endPos = new Vector3(startPos.x, GetDeathYPosition(), startPos.z);
 
-        yield return null;
+        // Preparar el material para el fade-out
+        Material mat = rend.material;
+        Color orig = mat.color;
+
+        // Bucle de animación: mientras no se cumpla la duración
+        while (elapsed < dur)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / dur);
+
+            // Fade-out del color del material (de opaco a transparente)
+            mat.color = new Color(orig.r, orig.g, orig.b, 1f - t);
+
+            // Movemos la posición (bajar hacia endPos)
+            transform.position = Vector3.Lerp(startPos, endPos, t);
+
+            yield return null;
+        }
+
+        // Una vez terminada la animación:
+        // - Despawn del enemigo
+        // - Reset de su vida para cuando se reutilice desde el pool
+        EnemySpawner.Instance.DespawnEnemy(gameObject, enemyType);
+        CurrentHealth = maxHealth;
+        isDeath = false;
+        rend.material.color = originalColor; // Reset color
     }
-
-    // Una vez terminada la animación:
-    // - Despawn del enemigo
-    // - Reset de su vida para cuando se reutilice desde el pool
-    EnemySpawner.Instance.DespawnEnemy(gameObject, enemyType);
-    CurrentHealth = maxHealth;
-    isDeath = false;
-}
 
 
     private float GetDeathYPosition()
     {
         // Devuelve la posición Y a la que queremos que caiga el enemigo
-        if(enemyType == EnemyType.Normal)
+        if (enemyType == EnemyType.Normal)
             return -1f;
         else if (enemyType == EnemyType.Giant)
             return -2f;

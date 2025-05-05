@@ -13,7 +13,6 @@ public class Player : CharacterBase, ILives
 
     public static event Action<float> OnHealthChanged;
     public static event Action<int> OnLivesChanged;
-    public static event Action OnPlayerDied;
 
     protected override void Awake()
     {
@@ -46,7 +45,7 @@ public class Player : CharacterBase, ILives
         }
         else
         {
-            OnPlayerDied?.Invoke(); //Llamamos al evento de muerte del jugador
+            GameController.Instance.FinishGame(GameOverType.PlayerDEAD); //Si no quedan vidas, se acaba el juego
         }        
     
         AudioController.Instance.PlaySFX(SoundType.LoseHealth); 

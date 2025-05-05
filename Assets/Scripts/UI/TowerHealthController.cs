@@ -28,7 +28,7 @@ public class TowerHealthController : MonoBehaviour
     {
         healthSlider.value = currentHealth;
 
-        if (currentHealth <= 100f)
+        if (currentHealth <= 400f)
         {
             healthSlider.fillRect.GetComponent<Image>().color = new Color(1f, 0.5f, 0.5f, 1f); // Rojo
         }

@@ -6,7 +6,7 @@ public class Tower : MonoBehaviour, IDamageable, IHealth
     public static event Action<float> OnHealthChanged;     // evento para la barra
 
     public new Transform transform => base.transform;
-    public float MaxHealth { get; private set; } = 1000f;
+    public float MaxHealth { get; private set; } = 2000f;
     public float CurrentHealth { get; private set; }
 
     private void Awake()
@@ -31,7 +31,7 @@ public class Tower : MonoBehaviour, IDamageable, IHealth
 
     public void Die()
     {
-        GameController.Instance.FinishGame();
+        GameController.Instance.FinishGame(GameOverType.TowerDEAD);
         Debug.Log("Torre destruida");
         Destroy(gameObject);
     }

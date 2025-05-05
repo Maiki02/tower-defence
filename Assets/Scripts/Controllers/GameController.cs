@@ -5,6 +5,8 @@ public class GameController : MonoBehaviour
 {
     public static GameController Instance { get; private set; }
     public GameState CurrentState { get; private set; } = GameState.Menu;
+    [SerializeField] public GameOverType CurrentGameOverType { get; private set; } = GameOverType.None;
+    public int Score { get; private set; } = 0;
 
     private void Awake()
     {
@@ -48,9 +50,11 @@ public class GameController : MonoBehaviour
         Time.timeScale = 1f;
     }
 
-    public void FinishGame()
+    public void FinishGame(GameOverType gameOverType)
     {
-        SetState(GameState.GameOver);
+        CurrentGameOverType = gameOverType;
+        Score = ScoreController.Instance.GetScore(); // Obtener el puntaje actual
+        SetState(GameState.GameOver); // Cambiar el estado a GameOver
         SceneController.Instance.LoadGameOverScene();
     }
 

@@ -49,4 +49,9 @@ public class ScoreController : MonoBehaviour
         if (scoreText != null)
             scoreText.text = "Score: " + currentScore.ToString("0");
     }
+
+    public int GetScore()
+    {
+        return currentScore;
+    }
 }
