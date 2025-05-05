@@ -13,6 +13,9 @@ public class RangedWeapon : WeaponBase
         // Animación
         // GetComponent<Animator>().Play(data.attackAnimation.name);
 
+        // Sonido
+        AudioController.Instance.PlaySFX(SoundType.RangedAttack);
+
         // Hitscan
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         if (Physics.Raycast(ray, out RaycastHit hit, data.range, damageableLayers))

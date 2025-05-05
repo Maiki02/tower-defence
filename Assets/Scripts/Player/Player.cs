@@ -37,6 +37,8 @@ public class Player : CharacterBase, ILives
 
     public void LoseLife()
     {
+        AudioController.Instance.PlaySFX(SoundType.LoseHealth); 
+        
         CurrentLives--;
         OnLivesChanged?.Invoke(CurrentLives); //Llamamos al evento de cambio de vidas
         if (CurrentLives > 0)

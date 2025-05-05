@@ -8,5 +8,5 @@ public class WeaponData : ScriptableObject
     public float range;
     public float cooldown;
     public GameObject projectilePrefab; // null para melee
-    public AnimationClip attackAnimation;
+    public AnimationClip attackAnimation; //TODO Analizar si lo uso, si lo uso en el prefab o en el script
 }

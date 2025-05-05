@@ -25,7 +25,7 @@ public abstract class CharacterBase : MonoBehaviour, IHealth, IDamageable
     // Se llama cuando el personaje muere
     public virtual void Die()
     {
-        Destroy(gameObject);
+        //Destroy(gameObject);
     }
 
 }

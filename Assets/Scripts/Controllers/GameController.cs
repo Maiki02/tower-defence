@@ -16,6 +16,11 @@ public class GameController : MonoBehaviour
         else Destroy(gameObject);
     }
 
+    private void Start()
+    {
+        AudioController.Instance.PlayMusic(SoundType.StartGame);
+    }
+
     // Cambia el estado y realiza acciones asociadas.
     private void SetState(GameState newState)
     {
@@ -26,7 +31,9 @@ public class GameController : MonoBehaviour
     public void StartGame()
     {
         SetState(GameState.Playing);
-        ScoreController.Instance.ResetScore();
+        //ScoreController.Instance.ResetScore();
+        Debug.Log("Load Scene");
+        SceneController.Instance.LoadGameScene();
     }
 
     public void PauseGame()

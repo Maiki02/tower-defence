@@ -12,11 +12,13 @@ public class MeleeWeapon : WeaponBase
         //Debug.Log($"Melee attack - {Time.time - lastAttackTime } < {data.cooldown}");
         //if (Time.time - lastAttackTime < data.cooldown) return;
 
-
         lastAttackTime = Time.time;
 
         // Lanzamos la animación antes de detectar
         // GetComponent<Animator>().Play(data.attackAnimation.name);
+
+        // Reproducimos el sonido del ataque
+        AudioController.Instance.PlaySFX(SoundType.KnifeAttack);
 
         // esto devuelve TODOS los colliders 3D en un radio concreto
         Collider[] hits = Physics.OverlapSphere(

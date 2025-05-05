@@ -3,10 +3,10 @@ using TMPro;
 
 public class WeaponUIController : MonoBehaviour, IWeaponObserver
 {
-    [SerializeField] private PlayerWeaponController playerWeaponController;
-    [SerializeField] private TextMeshProUGUI weaponNameText;
+    //[SerializeField] private PlayerWeaponController playerWeaponController;
+    //[SerializeField] private TextMeshProUGUI weaponNameText;
 
-    private void OnEnable()
+    /*private void OnEnable()
     {
         playerWeaponController.RegisterObserver(this);
     }
@@ -14,7 +14,7 @@ public class WeaponUIController : MonoBehaviour, IWeaponObserver
     private void OnDisable()
     {
         playerWeaponController.UnregisterObserver(this);
-    }
+    }*/
 
 
     public void OnWeaponChanged(WeaponBase newWeapon)
