@@ -74,7 +74,6 @@ public class EnemySpawner : MonoBehaviour
     {
         if (!pools.TryGetValue(type, out var pool))
         {
-            Debug.LogWarning($"[EnemySpawner] Pool no encontrado para devolver el objeto de tipo {type}");
             Destroy(enemy);
             return;
         }

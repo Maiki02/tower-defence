@@ -8,7 +8,7 @@ public class BackToMenuController : MonoBehaviour
 
     public void BackToMenu()
     {
-        Debug.Log("Regresando al menú principal...");
+        //Debug.Log("Regresando al menú principal...");
         GameController.Instance.ResetGame();
     }
 }

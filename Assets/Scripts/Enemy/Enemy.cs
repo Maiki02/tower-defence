@@ -147,7 +147,7 @@ public class Enemy : CharacterBase
             Die();
             return;
         }
-        Debug.Log($"Enemy took {amount} damage, remaining health: {CurrentHealth}");
+        //Debug.Log($"Enemy took {amount} damage, remaining health: {CurrentHealth}");
     }
 
     public void GetHit(float amount, Vector3 attackOrigin, Vector3 attackDir, float knockbackStrength)

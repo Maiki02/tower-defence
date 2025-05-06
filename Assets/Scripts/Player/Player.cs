@@ -31,7 +31,7 @@ public class Player : CharacterBase, ILives
         OnHealthChanged?.Invoke(CurrentHealth); //Llamamos al evento de cambio de vida
         if (CurrentHealth == 0f) LoseLife(); //Si la vida es 0, perdemos una vida
 
-        Debug.Log($"Player took {amount} damage. Current health: {CurrentHealth}");
+        //Debug.Log($"Player took {amount} damage. Current health: {CurrentHealth}");
     }
 
     public void LoseLife()

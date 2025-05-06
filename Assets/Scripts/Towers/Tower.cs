@@ -21,7 +21,7 @@ public class Tower : MonoBehaviour, IDamageable, IHealth
         CurrentHealth = Mathf.Max(CurrentHealth, 0f);
         OnHealthChanged?.Invoke(CurrentHealth);
 
-        Debug.Log($"Torre recibió {amount} de daño. Vida restante: {CurrentHealth}");
+        //Debug.Log($"Torre recibió {amount} de daño. Vida restante: {CurrentHealth}");
 
         if (CurrentHealth <= 0f)
         {
