@@ -55,7 +55,6 @@ public class WaveManager : MonoBehaviour
         }
     }
 
-
     private EnemyType GetRandomEnemyType()
     {
         int totalTipos = System.Enum.GetValues(typeof(EnemyType)).Length;

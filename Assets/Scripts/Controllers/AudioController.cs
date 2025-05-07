@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
-
 public class AudioController : MonoBehaviour
 {
     public static AudioController Instance { get; private set; }
@@ -56,9 +54,7 @@ public class AudioController : MonoBehaviour
     {
         musicSource.Stop();
     }
-
-
-
+ 
     //Detectamos el cambio de escena para poner la música adecuada
     private void OnEnable()  {
         SceneManager.sceneLoaded += OnSceneLoaded;

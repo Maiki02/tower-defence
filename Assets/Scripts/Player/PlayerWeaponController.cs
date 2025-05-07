@@ -4,9 +4,6 @@ using System.Collections.Generic;
 
 public class PlayerWeaponController : MonoBehaviour
 {
-    //Observers para notificar el cambio de arma y mostrarlo en la pantalla
-    private readonly List<IWeaponObserver> observers = new List<IWeaponObserver>();
-
     [SerializeField] private MeleeWeapon meleeWeapon;
     [SerializeField] private RangedWeapon rangedWeapon;
 
@@ -54,26 +51,8 @@ public class PlayerWeaponController : MonoBehaviour
         meleeWeapon.gameObject.SetActive(weapon == meleeWeapon);
         rangedWeapon.gameObject.SetActive(weapon == rangedWeapon);
 
-        // Notifico a los observers
         CurrentWeapon = weapon;
-        NotifyObservers();
     }
 
-    public void RegisterObserver(IWeaponObserver observer)
-    {
-        if (!observers.Contains(observer))
-            observers.Add(observer);
-    }
 
-    public void UnregisterObserver(IWeaponObserver observer)
-    {
-        observers.Remove(observer);
-    }
-
-    // Llama a cada observador
-    private void NotifyObservers()
-    {
-        foreach (var obs in observers)
-            obs.OnWeaponChanged(CurrentWeapon);
-    }
 }

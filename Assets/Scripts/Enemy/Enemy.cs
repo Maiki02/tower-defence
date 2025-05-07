@@ -4,21 +4,21 @@ using UnityEngine;
 public class Enemy : CharacterBase
 {
     [Header("Stats")]
-    [SerializeField] private float moveSpeed = 3f;
+    [SerializeField] private float moveSpeed = 3f; //Velocidad de movimiento del enemigo
     [SerializeField] private float rotationSpeed = 10f; //Para que el enemigo rote cuando se mueve
-    [SerializeField] private float stoppingDistance = 0.5f;
-    [SerializeField] private float attackRange = 1f;
-    [SerializeField] private float attackDamage = 10f;
-    [SerializeField] private float attackCooldown = 1.5f;
-    [SerializeField] private float maxHealth = 50f;
-    [SerializeField] private EnemyType enemyType = EnemyType.Normal;
+    [SerializeField] private float stoppingDistance = 0.5f; //Distancia en la que el enemigo para
+    [SerializeField] private float attackRange = 1f; //Distancia de ataque del enemigo
+    [SerializeField] private float attackDamage = 10f; //Daño del ataque del enemigo
+    [SerializeField] private float attackCooldown = 1.5f; //Cooldown entre ataques
+    [SerializeField] private float maxHealth = 50f; //Vida máxima del enemigo
+    [SerializeField] private EnemyType enemyType = EnemyType.Normal; //Tipo de enemigo
 
     [Header("Target")]
-    [SerializeField] private Transform followTarget;
+    [SerializeField] private Transform followTarget; //El enemigo sigue a este objeto (jugador o torre)
 
     [Header("Effects")]
-    [SerializeField] private float flashDuration = 0.2f;
-    [SerializeField] private Color flashColor = new Color(1, 0, 0, 0.5f);
+    [SerializeField] private float flashDuration = 0.2f; //Duración del efecto de flash al recibir daño
+    [SerializeField] private Color flashColor = new Color(1, 0, 0, 0.5f); //Color del efecto de flash al recibir daño
 
     private bool isDeath = false;
 

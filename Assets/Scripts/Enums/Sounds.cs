@@ -6,9 +6,9 @@ public enum SoundType
     RangedAttack, //Listo
     EnemyAttack, //Listo
     TowerAttack, //Listo
-    Victory,
-    Defeat,
-    LoseHealth, //Listo
-    PrincessHelp,
+    Victory, //Listo
+    Defeat, //Listo
+    LoseHealth, //Listo 
+    PrincessHelp, //No se usa
     EnemyDeath //Listo
 }
